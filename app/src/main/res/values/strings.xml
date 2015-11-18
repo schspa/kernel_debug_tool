@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">wake_lock</string>
+    <string name="action_exit">Exit</string>
+    <string name="test">Test</string>
+</resources>
