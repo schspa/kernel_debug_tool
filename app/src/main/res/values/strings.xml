@@ -2,4 +2,9 @@
     <string name="app_name">wake_lock</string>
     <string name="action_exit">Exit</string>
     <string name="test">Test</string>
+    <string name="kernel">kernel</string>
+    <string name="wakelock">Wakelock</string>
+    <string name="unwakelock">Unlock</string>
+    <string name="wronly">WR</string>
+    <string name="rdwr">RDWR</string>
 </resources>

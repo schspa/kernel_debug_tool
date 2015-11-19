@@ -9,6 +9,7 @@ public class SysfsInterface {
     }
     public native String read(String file);
     public native String write(String file, String buf);
+    public native boolean writeable(String file);
     public native void test();
     public native String[] getfile(String dir);
 }

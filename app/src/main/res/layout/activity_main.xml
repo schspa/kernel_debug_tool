@@ -8,10 +8,26 @@
 
     <android.support.design.widget.AppBarLayout android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
-
         <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
             android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay">
+            <ToggleButton
+                android:id="@+id/tb_wakelock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:textOn="@string/wakelock"
+                android:textOff="@string/unwakelock"
+                android:text="@string/abc_action_bar_home_description" />
+            <ToggleButton
+                android:id="@+id/tb_rdwr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:textOn="@string/wronly"
+                android:textOff="@string/rdwr"
+                android:text="@string/abc_action_bar_home_description" />
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 

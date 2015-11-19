@@ -15,6 +15,9 @@ extern "C" {
 JNIEXPORT jstring JNICALL Java_com_schspa_SysfsInterface_read
   (JNIEnv *, jobject, jstring);
 
+JNIEXPORT jboolean JNICALL Java_com_schspa_SysfsInterface_writeable
+        (JNIEnv *, jobject, jstring);
+
 JNIEXPORT jstring JNICALL Java_com_schspa_SysfsInterface_write
         (JNIEnv *, jobject, jstring, jstring);
 

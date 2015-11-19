@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">调试助手</string>
+    <string name="action_exit">退出</string>
+    <string name="wakelock">唤醒</string>
+    <string name="unwakelock">不唤醒</string>
+    <string name="wronly">可写</string>
+    <string name="rdwr">读写</string>
+</resources>

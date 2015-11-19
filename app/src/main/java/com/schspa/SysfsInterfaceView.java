@@ -38,6 +38,7 @@ public class SysfsInterfaceView extends LinearLayout {
 //            sw.setActivated(false);
             writeable = false;
         } else {
+            Log.d(TAG, "ret = "+ret);
             switch (ret) {
                 case "N":
                     BoolView(context, this, dir, name, false);
@@ -56,21 +57,30 @@ public class SysfsInterfaceView extends LinearLayout {
     }
 
     public boolean getwriteable() {
-        return writeable;
+        return sysfs.writeable(path);
     }
 
         public void BoolView(Context context, LinearLayout ll, String dir, String name, boolean initvalue) {
             ll.setOrientation(HORIZONTAL);
             tv_name = new TextView(context);
-            tv_name.setText(name);
-            tv_name.setTextColor(Color.BLACK);
+            tv_name.setText(name+":");
+            tv_name.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            ll.addView(tv_name);
+
+            if (!getwriteable()) {
+                TextView value = new TextView(context);
+                value.setText(String.valueOf(initvalue));
+                value.setTextColor(getResources().getColor(R.color.error_color));
+                ll.addView(value);
+                return ;
+            }
             sw = new ToggleButton(context);
             if (initvalue)
                 sw.setChecked(true);
             else
                 sw.setChecked(false);
             sw.setOnCheckedChangeListener(OnSwitch);
-            ll.addView(tv_name);
+
             ll.addView(sw);
         }
 
@@ -87,9 +97,7 @@ public class SysfsInterfaceView extends LinearLayout {
                         buttonView.setChecked(true);
                         break;
                 }
-
                 sw.setText(ret);
-                Log.v(TAG, "OnSwitch:read :"+ret);
             }
         };
 
@@ -98,8 +106,17 @@ public class SysfsInterfaceView extends LinearLayout {
     public void IntView(Context context, LinearLayout ll, String dir, String name, int initvalue) {
         ll.setOrientation(HORIZONTAL);
         tv_name = new TextView(context);
-        tv_name.setText(name);
-        tv_name.setTextColor(Color.BLACK);
+        tv_name.setText(name+":");
+        tv_name.setTextColor(getResources().getColor(R.color.colorPrimary));
+        ll.addView(tv_name);
+
+        if (!getwriteable()) {
+            TextView value = new TextView(context);
+            value.setText(String.valueOf(initvalue));
+            value.setTextColor(getResources().getColor(R.color.colorAccent));
+            ll.addView(value);
+            return ;
+        }
         et = new EditText(context);
         et.setText(String.valueOf(initvalue));
         et.setTextColor(Color.BLACK);
@@ -117,7 +134,6 @@ public class SysfsInterfaceView extends LinearLayout {
             }
         });
 
-        ll.addView(tv_name);
         ll.addView(et);
         ll.addView(save_button);
     }

@@ -87,7 +87,6 @@ JNIEXPORT jobjectArray JNICALL Java_com_schspa_SysfsInterface_getfile(JNIEnv * e
             (*env)->SetObjectArrayElement(env, args, j++, temp_str);
             if (j >= size)
                 break;
-            LOGD("filename %s\n", entry->d_name);
         }
     }
     closedir(dp);
@@ -104,7 +103,7 @@ JNIEXPORT jstring JNICALL Java_com_schspa_SysfsInterface_read
         char buf[20];
         char *path =  (char *) (*env)->GetStringUTFChars(env, str, 0);
         LOGD("read:%s", path);
-        fd = open(path, O_RDWR);
+        fd = open(path, O_RDONLY);
         if (fd <= 0)
             return NULL;
         len = read(fd, buf, sizeof(buf));
@@ -114,12 +113,23 @@ JNIEXPORT jstring JNICALL Java_com_schspa_SysfsInterface_read
                 if (buf[i] > 127 || buf[i] < 32)
                     buf[i] = '\0';
             }
-            LOGD("read %d:%s", len, buf);
             return (*env)->NewStringUTF(env, buf);
         } else {
             return (*env)->NewStringUTF(env, "No Data");
         }
   }
+
+JNIEXPORT jboolean JNICALL Java_com_schspa_SysfsInterface_writeable
+        (JNIEnv * env, jobject obj, jstring str) {
+    int fd;
+    char *path =  (char *) (*env)->GetStringUTFChars(env, str, 0);
+    fd = open(path, O_RDWR);
+    if (fd <= 0) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
 
 JNIEXPORT jstring JNICALL Java_com_schspa_SysfsInterface_write
         (JNIEnv * env, jobject obj, jstring str, jstring wbuf){
@@ -127,7 +137,6 @@ JNIEXPORT jstring JNICALL Java_com_schspa_SysfsInterface_write
     char *buf = (char *) (*env)->GetStringUTFChars(env, wbuf, 0);
     char *path =  (char *) (*env)->GetStringUTFChars(env, str, 0);
     len = (char *) (*env)->GetStringUTFLength(env, wbuf);
-    LOGD("write:%s:%s", path, buf);
     fd = open(path, O_RDWR);
     if (fd <= 0) {
         LOGE("open RDWR failed");

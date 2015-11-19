@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.util.Log;
+import android.widget.ToggleButton;
 
 import com.schspa.SysfsInterface;
 import com.schspa.SysfsInterfaceView;
@@ -34,12 +34,7 @@ public class MainActivity extends AppCompatActivity {
         mWakelock = ((PowerManager)this.getSystemService(POWER_SERVICE))
                 .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "wake_lock_app");
 
-        Switch wake_lock_switch = new Switch(getApplicationContext());
-
-        wake_lock_switch.setBackground(toolbar.getBackground());
-        wake_lock_switch.setHintTextColor(toolbar.getDrawingCacheBackgroundColor());
-        wake_lock_switch.setHeight(toolbar.getHeight());
-        toolbar.addView(wake_lock_switch);
+        ToggleButton wake_lock_switch = (ToggleButton) findViewById(R.id.tb_wakelock);
         wake_lock_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -66,6 +61,31 @@ public class MainActivity extends AppCompatActivity {
             if (v != null && v.getwriteable())
                 sysfs_ll.addView(v);
         }
+
+        ToggleButton tb_showreadonly = (ToggleButton) findViewById(R.id.tb_rdwr);
+
+        tb_showreadonly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                String[] str = sysfs.getfile(dir);
+                sysfs_ll.removeAllViews();
+                if (isChecked) {
+                    for (int i = 0; i < str.length; i++) {
+                        Log.v(TAG, "get file:" + str[i]);
+                        SysfsInterfaceView v = new SysfsInterfaceView(getApplicationContext(), dir, str[i]);
+                        if (v != null)
+                            sysfs_ll.addView(v);
+                    }
+                } else {
+                    for (int i = 0; i < str.length; i++) {
+                        Log.v(TAG, "get file:" + str[i]);
+                        SysfsInterfaceView v = new SysfsInterfaceView(getApplicationContext(), dir, str[i]);
+                        if (v != null && v.getwriteable())
+                            sysfs_ll.addView(v);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -88,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_exit) {
