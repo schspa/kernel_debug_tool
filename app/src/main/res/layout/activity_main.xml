@@ -16,6 +16,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
+                android:textColor="@color/toolbar_text_color"
                 android:textOn="@string/wakelock"
                 android:textOff="@string/unwakelock"
                 android:text="@string/abc_action_bar_home_description" />
@@ -24,9 +25,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
+                android:textColor="@color/toolbar_text_color"
                 android:textOn="@string/wronly"
-                android:textOff="@string/rdwr"
-                android:text="@string/abc_action_bar_home_description" />
+                android:textOff="@string/rdwr" />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

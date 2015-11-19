@@ -64,13 +64,13 @@ public class SysfsInterfaceView extends LinearLayout {
             ll.setOrientation(HORIZONTAL);
             tv_name = new TextView(context);
             tv_name.setText(name+":");
-            tv_name.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            tv_name.setTextColor(getResources().getColor(R.color.variable_name_color));
             ll.addView(tv_name);
 
             if (!getwriteable()) {
                 TextView value = new TextView(context);
                 value.setText(String.valueOf(initvalue));
-                value.setTextColor(getResources().getColor(R.color.error_color));
+                value.setTextColor(getResources().getColor(R.color.variable_value_color));
                 ll.addView(value);
                 return ;
             }
@@ -107,13 +107,13 @@ public class SysfsInterfaceView extends LinearLayout {
         ll.setOrientation(HORIZONTAL);
         tv_name = new TextView(context);
         tv_name.setText(name+":");
-        tv_name.setTextColor(getResources().getColor(R.color.colorPrimary));
+        tv_name.setTextColor(getResources().getColor(R.color.variable_name_color));
         ll.addView(tv_name);
 
         if (!getwriteable()) {
             TextView value = new TextView(context);
             value.setText(String.valueOf(initvalue));
-            value.setTextColor(getResources().getColor(R.color.colorAccent));
+            value.setTextColor(getResources().getColor(R.color.variable_value_color));
             ll.addView(value);
             return ;
         }
