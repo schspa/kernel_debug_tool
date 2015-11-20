@@ -7,4 +7,9 @@
     <string name="unwakelock">Unlock</string>
     <string name="wronly">WR</string>
     <string name="rdwr">RDWR</string>
+    <string name="keep_screen_on">ScreenOn</string>
+    <string name="no_keep_screen_on">Normal</string>
+    <string name="name">name</string>
+    <string name="value">value</string>
+    <string name="save">save</string>
 </resources>

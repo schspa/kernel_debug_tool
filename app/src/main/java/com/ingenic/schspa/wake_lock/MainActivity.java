@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -21,9 +23,10 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
     private SysfsInterface sysfs = new SysfsInterface();
     private PowerManager.WakeLock mWakelock;
-    private ScrollView sysfswrapper;
     LinearLayout sysfs_ll;
     private final String dir = "/sys/module/kernel/parameters";
+    private int screen_width;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +34,21 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mWakelock = ((PowerManager)this.getSystemService(POWER_SERVICE))
+        screen_width = this.getWindowManager().getDefaultDisplay().getWidth();
+
+        mWakelock = ((PowerManager) this.getSystemService(POWER_SERVICE))
                 .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "wake_lock_app");
 
+        ToggleButton tg_screen = (ToggleButton) findViewById(R.id.tb_keepScreenOn);
+        tg_screen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                else
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        });
         ToggleButton wake_lock_switch = (ToggleButton) findViewById(R.id.tb_wakelock);
         wake_lock_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -48,44 +63,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        sysfswrapper = (ScrollView) findViewById(R.id.sysfswrapper);
-        sysfs_ll = new LinearLayout(getApplicationContext());
-        sysfs_ll.setOrientation(LinearLayout.VERTICAL);
-        sysfswrapper.addView(sysfs_ll);
-
-        String[] str = sysfs.getfile(dir);
-
-        for (int i=0; i<str.length; i++) {
-            Log.v(TAG, "get file:" + str[i]);
-            SysfsInterfaceView v = new SysfsInterfaceView(getApplicationContext(), dir, str[i]);
-            if (v != null && v.getwriteable())
-                sysfs_ll.addView(v);
-        }
+        sysfs_ll = (LinearLayout) findViewById(R.id.sysfs_ll);
 
         ToggleButton tb_showreadonly = (ToggleButton) findViewById(R.id.tb_rdwr);
+        refresh(tb_showreadonly.isChecked());
 
         tb_showreadonly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String[] str = sysfs.getfile(dir);
-                sysfs_ll.removeAllViews();
-                if (isChecked) {
-                    for (int i = 0; i < str.length; i++) {
-                        Log.v(TAG, "get file:" + str[i]);
-                        SysfsInterfaceView v = new SysfsInterfaceView(getApplicationContext(), dir, str[i]);
-                        if (v != null)
-                            sysfs_ll.addView(v);
-                    }
-                } else {
-                    for (int i = 0; i < str.length; i++) {
-                        Log.v(TAG, "get file:" + str[i]);
-                        SysfsInterfaceView v = new SysfsInterfaceView(getApplicationContext(), dir, str[i]);
-                        if (v != null && v.getwriteable())
-                            sysfs_ll.addView(v);
-                    }
-                }
+                refresh(isChecked);
             }
         });
+    }
+
+    private void refresh(boolean wronly) {
+        sysfs_ll.removeAllViews();
+        String[] str = sysfs.getfile(dir);
+
+        for (int i = 0; i < str.length; i++) {
+            Log.v(TAG, "get file:" + str[i]);
+            SysfsInterfaceView v = new SysfsInterfaceView(getApplicationContext(), dir, str[i], screen_width);
+            if (v.get_view() != null && (wronly || v.getwriteable()))
+                sysfs_ll.addView(v.get_view());
+        }
     }
 
     @Override

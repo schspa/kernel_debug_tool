@@ -6,4 +6,6 @@
     <color name="toolbar_text_color">#FFFFFF</color>
     <color name="variable_name_color">@color/colorPrimary</color>
     <color name="variable_value_color">@color/colorAccent</color>
+    <color name="button_backgrount">#FFFFFF</color>
+    <color name="button_text">@color/colorPrimary</color>
 </resources>

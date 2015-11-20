@@ -11,23 +11,52 @@
         <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
             android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay">
-            <ToggleButton
-                android:id="@+id/tb_wakelock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:textColor="@color/toolbar_text_color"
-                android:textOn="@string/wakelock"
-                android:textOff="@string/unwakelock"
-                android:text="@string/abc_action_bar_home_description" />
-            <ToggleButton
-                android:id="@+id/tb_rdwr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:textColor="@color/toolbar_text_color"
-                android:textOn="@string/wronly"
-                android:textOff="@string/rdwr" />
+            <!--<ScrollView-->
+                <!--android:layout_width="180dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="0dp"-->
+                <!--android:scrollX="180dp">-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal" >-->
+                    <ToggleButton
+                        android:id="@+id/tb_wakelock"
+                        android:layout_width="50dp"
+                        android:layout_height="36dp"
+                        android:background="?attr/colorPrimary"
+                        android:textColor="@color/toolbar_text_color"
+                        android:padding="0dp"
+                        android:textOn="@string/wakelock"
+                        android:textOff="@string/unwakelock"
+                        android:text="@string/abc_action_bar_home_description" />
+                    <ToggleButton
+                        android:id="@+id/tb_rdwr"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorPrimary"
+                        android:padding="0dp"
+                        android:textColor="@color/toolbar_text_color"
+                        android:textOn="@string/wronly"
+                        android:textOff="@string/rdwr" />
+                    <ToggleButton
+                        android:id="@+id/tb_keepScreenOn"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorPrimary"
+                        android:textColor="@color/toolbar_text_color"
+                        android:textDirection="inherit"
+                        android:textOn="@string/keep_screen_on"
+                        android:textOff="@string/no_keep_screen_on"
+                        android:padding="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingTop="0dp"
+                        android:paddingRight="0dp"
+                        android:paddingBottom="0dp" />
+                <!--</LinearLayout>-->
+
+            <!--</ScrollView>-->
+
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

@@ -4,12 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -20,68 +20,77 @@ import com.ingenic.schspa.wake_lock.R;
  * Created by schspa on 11/18/15.
  * each file have one this view
  */
-public class SysfsInterfaceView extends LinearLayout {
+public class SysfsInterfaceView {
     private final String TAG = "SysfsInterfaceView";
     private Context context;
     private TextView tv_name, tv_value;
     private ToggleButton sw;
     private String path;
+    private String dir;
+    private String filename;
     private SysfsInterface sysfs = new SysfsInterface();
+    private int name_width;
     private boolean writeable;
-    public SysfsInterfaceView(Context context, String dir, String name) {
-        super(context);
-        this.context = context;
 
+    public SysfsInterfaceView(Context context, String dir, String name, int width) {
+        this.context = context;
+        this.dir = dir;
+        this.filename = name;
+        this.name_width = (width*4)/10;
         path = new String(dir+"/"+name);
+    }
+
+    public View get_view() {
+
         String ret = sysfs.read(path);
+        View v = null;
         if (ret == null) {
-//            sw.setActivated(false);
             writeable = false;
         } else {
             Log.d(TAG, "ret = "+ret);
             switch (ret) {
                 case "N":
-                    BoolView(context, this, dir, name, false);
-//                    sw.setChecked(false);
+                    v = BoolView(context, dir, filename, false);
                     break;
                 case "Y":
-//                    sw.setChecked(true);
-                    BoolView(context, this, dir, name, true);
+                    v = BoolView(context, dir, filename, true);
                     break;
                 default:
-                    IntView(context, this, dir, name, Integer.valueOf(ret));
+                    v = IntView(context, dir, filename, Integer.valueOf(ret));
                     break;
             }
             writeable = true;
         }
+        return v;
     }
-
     public boolean getwriteable() {
         return sysfs.writeable(path);
     }
 
-        public void BoolView(Context context, LinearLayout ll, String dir, String name, boolean initvalue) {
-            ll.setOrientation(HORIZONTAL);
-            tv_name = new TextView(context);
-            tv_name.setText(name+":");
-            tv_name.setTextColor(getResources().getColor(R.color.variable_name_color));
-            ll.addView(tv_name);
+        public View BoolView(Context context, String dir, String filename, boolean initvalue) {
+            LayoutInflater li = LayoutInflater.from(context);
 
             if (!getwriteable()) {
-                TextView value = new TextView(context);
+                View v = li.inflate(R.layout.value_view_rdonly, null);
+                TextView name = (TextView) v.findViewById(R.id.name);
+                TextView value = (TextView) v.findViewById(R.id.value);
+                name.setText(filename);
+                name.setMaxWidth(name_width);
                 value.setText(String.valueOf(initvalue));
-                value.setTextColor(getResources().getColor(R.color.variable_value_color));
-                ll.addView(value);
-                return ;
+                return v;
             }
-            sw = new ToggleButton(context);
-            if (initvalue)
-                sw.setChecked(true);
-            else
-                sw.setChecked(false);
-            sw.setOnCheckedChangeListener(OnSwitch);
 
-            ll.addView(sw);
+            View v = li.inflate(R.layout.boot_view_rdwr, null);
+            TextView name = (TextView) v.findViewById(R.id.name);
+            name.setMaxWidth(name_width);
+            name.setText(filename);
+            ToggleButton tg = (ToggleButton) v.findViewById(R.id.valueswitch);
+            if (initvalue)
+                tg.setChecked(true);
+            else
+                tg.setChecked(false);
+            tg.setOnCheckedChangeListener(OnSwitch);
+            return v;
         }
 
         CompoundButton.OnCheckedChangeListener OnSwitch = new CompoundButton.OnCheckedChangeListener() {
@@ -97,44 +106,38 @@ public class SysfsInterfaceView extends LinearLayout {
                         buttonView.setChecked(true);
                         break;
                 }
-                sw.setText(ret);
+                buttonView.setText(ret);
             }
         };
 
-    private EditText et;
-    private Button save_button;
-    public void IntView(Context context, LinearLayout ll, String dir, String name, int initvalue) {
-        ll.setOrientation(HORIZONTAL);
-        tv_name = new TextView(context);
-        tv_name.setText(name+":");
-        tv_name.setTextColor(getResources().getColor(R.color.variable_name_color));
-        ll.addView(tv_name);
+    private EditText ed_int_value;
+    public View IntView(Context context, String dir, String filename, int initvalue) {
+        LayoutInflater li = LayoutInflater.from(context);
 
         if (!getwriteable()) {
-            TextView value = new TextView(context);
+            View v = li.inflate(R.layout.value_view_rdonly, null);
+            TextView name = (TextView) v.findViewById(R.id.name);
+            name.setMaxWidth(name_width);
+            TextView value = (TextView) v.findViewById(R.id.value);
+            name.setText(filename);
             value.setText(String.valueOf(initvalue));
-            value.setTextColor(getResources().getColor(R.color.variable_value_color));
-            ll.addView(value);
-            return ;
+            return v;
         }
-        et = new EditText(context);
-        et.setText(String.valueOf(initvalue));
-        et.setTextColor(Color.BLACK);
-
-        et.setInputType(InputType.TYPE_CLASS_NUMBER
-                | InputType.TYPE_NUMBER_FLAG_SIGNED);
-        save_button = new Button(context);
-        save_button.setText("Save");
-        save_button.setTextColor(Color.BLACK);
-        save_button.setOnClickListener(new OnClickListener() {
+        View v = li.inflate(R.layout.int_view_rdwr, null);
+        TextView name = (TextView) v.findViewById(R.id.name);
+        name.setMaxWidth(name_width);
+        name.setText(filename);
+        ed_int_value = (EditText) v.findViewById(R.id.edittext);
+        Button save_button = (Button) v.findViewById(R.id.bt_save);
+        ed_int_value.setText(String.valueOf(initvalue));
+        save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sysfs.write(path, et.getText().toString());
-                et.setText(sysfs.read(path));
+                sysfs.write(path, ed_int_value.getText().toString());
+                ed_int_value.setText(sysfs.read(path));
             }
         });
 
-        ll.addView(et);
-        ll.addView(save_button);
+        return v;
     }
 }

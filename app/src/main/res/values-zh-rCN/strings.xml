@@ -5,4 +5,9 @@
     <string name="unwakelock">不唤醒</string>
     <string name="wronly">可写</string>
     <string name="rdwr">读写</string>
+    <string name="keep_screen_on">常亮</string>
+    <string name="no_keep_screen_on">正常</string>
+    <string name="name">名字</string>
+    <string name="value">值</string>
+    <string name="save">保存</string>
 </resources>
