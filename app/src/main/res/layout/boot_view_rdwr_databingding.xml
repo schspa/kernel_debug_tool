@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <variable name="user" type="com.schspa.SysfsInterfaceView" />
+        <variable name="value" type="android.databinding.ObservableBoolean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@{user.filename}"
+            android:textColor="@color/variable_name_color" />
+
+        <Button
+            android:id="@+id/valueswitch"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@{value.get()? @color/variable_value_color : @color/variable_name_color}"
+            android:text="" />
+
+    </LinearLayout>
+</layout>
