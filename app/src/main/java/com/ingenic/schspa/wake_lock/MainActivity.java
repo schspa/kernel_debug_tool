@@ -40,22 +40,31 @@ public class MainActivity extends AppCompatActivity {
                 .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "wake_lock_app");
 
         ToggleButton tg_screen = (ToggleButton) findViewById(R.id.tb_keepScreenOn);
+        tg_screen.setChecked(false);
+        tg_screen.setBackground(getResources().getDrawable(R.mipmap.ic_visibility_off_white));
         tg_screen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
                     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                else
+                    buttonView.setBackground(getResources().getDrawable(R.mipmap.ic_visibility_white));
+                } else {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                    buttonView.setBackground(getResources().getDrawable(R.mipmap.ic_visibility_off_white));
+                }
             }
         });
         ToggleButton wake_lock_switch = (ToggleButton) findViewById(R.id.tb_wakelock);
+        wake_lock_switch.setBackground(getResources().getDrawable(R.mipmap.ic_lock_open_white));
+        wake_lock_switch.setChecked(false);
         wake_lock_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    buttonView.setBackground(getResources().getDrawable(R.mipmap.ic_lock_outline_white));
                     mWakelock.acquire();
                 } else {
+                    buttonView.setBackground(getResources().getDrawable(R.mipmap.ic_lock_open_white));
                     mWakelock.release();
                 }
                 Snackbar.make(buttonView, "wack_lock:" + isChecked, Snackbar.LENGTH_LONG)
@@ -81,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         String[] str = sysfs.getfile(dir);
 
         for (int i = 0; i < str.length; i++) {
-            Log.v(TAG, "get file:" + str[i]);
             SysfsInterfaceView v = new SysfsInterfaceView(getApplicationContext(), dir, str[i], screen_width);
             if (v.get_view() != null && (wronly || v.getwriteable()))
                 sysfs_ll.addView(v.get_view());

@@ -18,12 +18,15 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content" />
-    <Button
+    <ImageButton
         android:id="@+id/bt_save"
-        android:text="@string/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/button_text"
-        android:background="@color/button_backgrount" />
+        android:src="@mipmap/ic_system_update_alt_white"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:hapticFeedbackEnabled="true"
+        android:background="@color/button_backgrount"
+        android:backgroundTintMode="screen"
+        android:theme="@style/AlertDialog.AppCompat"
+        android:adjustViewBounds="true" />
 
 </LinearLayout>

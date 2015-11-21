@@ -22,13 +22,13 @@
                     <!--android:orientation="horizontal" >-->
                     <ToggleButton
                         android:id="@+id/tb_wakelock"
-                        android:layout_width="50dp"
-                        android:layout_height="36dp"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
                         android:background="?attr/colorPrimary"
                         android:textColor="@color/toolbar_text_color"
                         android:padding="0dp"
-                        android:textOn="@string/wakelock"
-                        android:textOff="@string/unwakelock"
+                        android:textOn=""
+                        android:textOff=""
                         android:text="@string/abc_action_bar_home_description" />
                     <ToggleButton
                         android:id="@+id/tb_rdwr"
@@ -41,13 +41,13 @@
                         android:textOff="@string/rdwr" />
                     <ToggleButton
                         android:id="@+id/tb_keepScreenOn"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
                         android:background="?attr/colorPrimary"
                         android:textColor="@color/toolbar_text_color"
                         android:textDirection="inherit"
-                        android:textOn="@string/keep_screen_on"
-                        android:textOff="@string/no_keep_screen_on"
+                        android:textOn=""
+                        android:textOff=""
                         android:padding="0dp"
                         android:paddingLeft="0dp"
                         android:paddingTop="0dp"

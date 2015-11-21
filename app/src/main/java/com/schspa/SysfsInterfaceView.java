@@ -2,6 +2,7 @@ package com.schspa;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.Image;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -47,7 +49,6 @@ public class SysfsInterfaceView {
         if (ret == null) {
             writeable = false;
         } else {
-            Log.d(TAG, "ret = "+ret);
             switch (ret) {
                 case "N":
                     v = BoolView(context, dir, filename, false);
@@ -85,11 +86,12 @@ public class SysfsInterfaceView {
             name.setMaxWidth(name_width);
             name.setText(filename);
             ToggleButton tg = (ToggleButton) v.findViewById(R.id.valueswitch);
-            if (initvalue)
-                tg.setChecked(true);
-            else
-                tg.setChecked(false);
+            tg.setTextOff(null);
+            tg.setTextOn(null);
+            tg.setText(null);
             tg.setOnCheckedChangeListener(OnSwitch);
+            OnSwitch.onCheckedChanged(tg, initvalue);
+
             return v;
         }
 
@@ -101,12 +103,14 @@ public class SysfsInterfaceView {
                 switch (ret) {
                     case "N":
                         buttonView.setChecked(false);
+                        buttonView.setBackgroundDrawable(buttonView.getResources().getDrawable(R.mipmap.ic_radio_button_unchecked));
                         break;
                     case "Y":
                         buttonView.setChecked(true);
+                        buttonView.setBackgroundDrawable(buttonView.getResources().getDrawable(R.mipmap.ic_radio_button_checked));
+
                         break;
                 }
-                buttonView.setText(ret);
             }
         };
 
@@ -128,7 +132,7 @@ public class SysfsInterfaceView {
         name.setMaxWidth(name_width);
         name.setText(filename);
         ed_int_value = (EditText) v.findViewById(R.id.edittext);
-        Button save_button = (Button) v.findViewById(R.id.bt_save);
+        ImageButton save_button = (ImageButton) v.findViewById(R.id.bt_save);
         ed_int_value.setText(String.valueOf(initvalue));
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
